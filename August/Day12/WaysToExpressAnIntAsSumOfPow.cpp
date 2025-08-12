@@ -1,0 +1,60 @@
+// LEETCODE 2787...
+
+// Given two positive integers n and x.
+
+// Return the number of ways n can be expressed as the sum of the xth power of unique positive integers, in other words, the number of sets of unique integers [n1, n2, ..., nk] where n = n1x + n2x + ... + nkx.
+
+// Since the result can be very large, return it modulo 109 + 7.
+
+// For example, if n = 160 and x = 3, one way to express n is n = 23 + 33 + 53.
+
+ 
+
+// Example 1:
+
+// Input: n = 10, x = 2
+// Output: 1
+// Explanation: We can express n as the following: n = 32 + 12 = 10.
+// It can be shown that it is the only way to express 10 as the sum of the 2nd power of unique integers.
+// Example 2:
+
+// Input: n = 4, x = 1
+// Output: 2
+// Explanation: We can express n in the following ways:
+// - n = 41 = 4.
+// - n = 31 + 11 = 4.
+ 
+
+// Constraints:
+
+// 1 <= n <= 300
+// 1 <= x <= 5
+
+
+// 🚀 Approach
+// We use bottom-up dynamic programming with a 1D dp array where dp[s] represents the number of ways to form sum s using the available powered integers.
+// Initialize dp[0] = 1 because there's one way to make sum 0: using no elements.
+// Iterate i from 1 upward, and compute num = i^x.
+// For each num, update the dp array in reverse (from n down to num) to ensure each number is only used once.
+// Accumulate the number of ways to form each sum s by adding dp[s - num].
+// This ensures we count all combinations of unique powers that sum to n.
+
+
+class Solution {
+public:
+    const int m = 1e9 + 7;
+    
+    int numberOfWays(int n, int x) {
+        vector<long long> dp(n + 1, 0);
+        dp[0] = 1;
+
+        for (int i = 1; pow(i, x) <= n; i++) {
+            int num = (int)pow(i, x);
+            for (int s = n; s >= num; s--) {
+                dp[s] = (dp[s] + dp[s - num]) % m;
+            }
+        }
+
+        return (int)dp[n];
+    }
+};
