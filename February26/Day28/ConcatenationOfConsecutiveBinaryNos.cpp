@@ -1,0 +1,67 @@
+// LEETCODE 1680. Concatenation of Consecutive Binary Numbers
+
+// Given an integer n, return the decimal value of the binary string formed by concatenating the binary representations of 1 to n in order, modulo 109 + 7.
+
+ 
+
+// Example 1:
+
+// Input: n = 1
+// Output: 1
+// Explanation: "1" in binary corresponds to the decimal value 1. 
+// Example 2:
+
+// Input: n = 3
+// Output: 27
+// Explanation: In binary, 1, 2, and 3 corresponds to "1", "10", and "11".
+// After concatenating them, we have "11011", which corresponds to the decimal value 27.
+// Example 3:
+
+// Input: n = 12
+// Output: 505379714
+// Explanation: The concatenation results in "1101110010111011110001001101010111100".
+// The decimal value of that is 118505380540.
+// After modulo 109 + 7, the result is 505379714.
+ 
+
+// Constraints:
+
+// 1 <= n <= 105
+
+
+// 🚀 Approach
+// Maintain a running result res.
+// For each integer i from 1 to n:
+//     Determine how many binary digits i has.
+//         A neat trick: whenever i is a power of two, the number of digits increases by 1.
+//     Left-shift res by that number of digits (equivalent to concatenating binary).
+//     Add i to res.
+//     Take modulo 10⁹ + 7 to avoid overflow.
+// Return the final result.
+
+// 🕛 Complexity
+// Time complexity: O(n)
+// Space complexity: O(1)
+
+
+
+
+
+
+
+
+
+class Solution {
+public:
+    const int MOD = 1e9 + 7;
+    int concatenatedBinary(int n) {
+        long res = 0;
+        int digs = 0;
+
+        for (int i = 1; i <= n; i++) {
+            if ((i & (i - 1)) == 0) digs++;    
+            res = ((res << digs) % MOD + i) % MOD;
+        }
+        return res;
+    }
+};
